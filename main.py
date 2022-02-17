@@ -225,7 +225,7 @@ def start_app():
     get_session_cookies(zip_code="62999")
 
 
-threading.Thread(target=start_app, daemon=True).start()
+# threading.Thread(target=start_app, daemon=True).start()
 
 
 if __name__ == "__main__":
