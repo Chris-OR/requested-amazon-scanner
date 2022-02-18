@@ -55,9 +55,7 @@ def get_webpage_with_proxy(url):
             searching = False
             return response
         except Exception as e:
-            print("\n")
             print(e)
-            print("\n")
             print("something went wrong")
 
     # webpage = response.text
