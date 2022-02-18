@@ -2,6 +2,7 @@ import requests
 from proxy_requests import ProxyRequests
 from bs4 import BeautifulSoup
 import time
+import telegram
 import threading
 import os
 from flask import Flask
@@ -100,12 +101,13 @@ def handle_webpage(soup):
         try:
             price = soup.find(id="buyNew_noncbb").getText().rstrip().lstrip()
             print(price)
+            send_telegram_message("vacuum", "$14.54", "https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp/B006LXOJC0/ref=sr_1_1?m=A2L77EE7U53NWQ&qid=1645135202&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-1")
         except:
             print("Product is unavailable")
 
     print("\n")
 
-print("App loaded...")
+
 #
 # threading.Thread(target=checker_thread, daemon=True).start()
 #
@@ -218,14 +220,23 @@ def get_session_cookies(zip_code: str):
             # assert zip_code in location_label
 
             # get_webpage("https://www.amazon.com/DYSON-208992-01-Dyson-Total-Clean/dp/B011MACQ4O/ref=sr_1_18?m=A2L77EE7U53NWQ&pf_rd_i=10158976011&pf_rd_m=ATVPDKIKX0DER&pf_rd_p=27825c4b-ab2a-4439-a18e-8a6136972ae0&pf_rd_r=HE81QTTRH8KVW7EX4920&pf_rd_s=merchandised-search-5&pf_rd_t=101&qid=1644958427&rnid=10158976011&s=warehouse-deals&sr=1-18", headers, response.cookies)
-            time.sleep(50)
+            time.sleep(75)
+
+
+def send_telegram_message(title, price, URL):
+    bot_token = os.environ.get("BOT_TOKEN")
+    bot = telegram.Bot(bot_token)
+    chat_id = os.environ.get("VACUUM_CHAT_ID")
+    message = f"{title} is {price}.  Check it out: {URL}"
+    bot.sendMessage(chat_id, message, parse_mode=telegram.ParseMode.HTML)
 
 
 def start_app():
-    get_session_cookies(zip_code="62999")
+    print("App loaded...")
+    get_session_cookies(zip_code=os.environ.get("ZIP_CODE"))
 
 
-# threading.Thread(target=start_app, daemon=True).start()
+threading.Thread(target=start_app, daemon=True).start()
 
 
 if __name__ == "__main__":
