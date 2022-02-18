@@ -9,7 +9,7 @@ from flask import Flask
 import json
 from parsel import Selector
 
-URL_LIST = ["https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp/B006LXOJC0/ref=sr_1_1?m=A2L77EE7U53NWQ&qid=1645135202&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-1",
+URL_LIST = ["https://www.amazon.com/Dyson-343783-01-Cyclone-Cord-Free-Cleaner/dp/B08QHLPXMS/ref=sr_1_32?m=A2L77EE7U53NWQ&qid=1645223842&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-32",
             "https://www.amazon.com/Dyson-Cyclone-Absolute-Lightweight-Cordless/dp/B0798FVV6V/ref=sr_1_2?keywords=Dyson&m=A2L77EE7U53NWQ&qid=1644714367&s=warehouse-deals&sr=8-2",
             "https://www.amazon.com/Dyson-Animal-Cordless-Vacuum-Cleaner/dp/B079K9B4XV/ref=sr_1_3?keywords=Dyson&m=A2L77EE7U53NWQ&qid=1644714367&s=warehouse-deals&sr=8-3",
             "https://www.amazon.com/Dyson-Cyclone-Absolute-Lightweight-Cordless/dp/B0798FVV6V/ref=sr_1_20?m=A2L77EE7U53NWQ&qid=1644862049&rnid=10158976011&s=warehouse-deals&sr=1-20",
