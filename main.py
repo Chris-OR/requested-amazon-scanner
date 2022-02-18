@@ -227,6 +227,7 @@ def get_session_cookies(zip_code: str):
 
 def send_telegram_message(title, price, URL):
     bot_token = os.environ.get("BOT_TOKEN")
+    print(bot_token)
     bot = telegram.Bot(bot_token)
     chat_id = os.environ.get("VACUUM_CHAT_ID")
     message = f"{title} is {price}.  Check it out: {URL}"
