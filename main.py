@@ -101,12 +101,9 @@ def handle_webpage(soup):
         try:
             price = soup.find(id="buyNew_noncbb").getText().rstrip().lstrip()
             print(price)
+            send_telegram_message("vacuum", "$14.54", "https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp/B006LXOJC0/ref=sr_1_1?m=A2L77EE7U53NWQ&qid=1645135202&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-1")
         except:
             print("Product is unavailable")
-        try:
-            send_telegram_message("vacuum", "$14.54", "https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp/B006LXOJC0/ref=sr_1_1?m=A2L77EE7U53NWQ&qid=1645135202&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-1")
-        except Exception as e:
-            print(e)
     print("\n")
 
 
@@ -227,7 +224,6 @@ def get_session_cookies(zip_code: str):
 
 def send_telegram_message(title, price, URL):
     bot_token = os.environ.get("BOT_TOKEN")
-    print(bot_token)
     bot = telegram.Bot(bot_token)
     chat_id = os.environ.get("VACUUM_CHAT_ID")
     message = f"{title} is {price}.  Check it out: {URL}"
