@@ -16,6 +16,7 @@ URL_LIST = ["https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp
             "https://www.amazon.com/Dyson-Cyclone-Absolute-Lightweight-Cordless/dp/B0798FVV6V/ref=sr_1_20?m=A2L77EE7U53NWQ&qid=1644862049&rnid=10158976011&s=warehouse-deals&sr=1-20",
             "https://www.amazon.com/Dyson-Animal-Cordless-Vacuum-Cleaner/dp/B079K9B4XV/ref=sr_1_15?m=A2L77EE7U53NWQ&qid=1644862049&rnid=10158976011&s=warehouse-deals&sr=1-15"
 ]
+in_stock = []
 #
 # headers = {
 #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
@@ -83,7 +84,9 @@ def get_webpage(url, headers, cookies):
 #             time.sleep(75)
 #
 #
-def handle_webpage(soup):
+
+
+def handle_webpage(soup, url):
     captcha_catcher = soup.find(name="p", class_="a-last")
     captcha = False
 
@@ -101,9 +104,12 @@ def handle_webpage(soup):
         try:
             price = soup.find(id="buyNew_noncbb").getText().rstrip().lstrip()
             print(price)
-            send_telegram_message("vacuum", "$14.54", "https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp/B006LXOJC0/ref=sr_1_1?m=A2L77EE7U53NWQ&qid=1645135202&refresh=1&rnid=10158976011&s=warehouse-deals&sr=1-1")
+            if title not in in_stock:
+                send_telegram_message(title, price, url)
+                in_stock.append(title)
         except:
             print("Product is unavailable")
+            in_stock.remove(title)
     print("\n")
 
 
@@ -185,7 +191,7 @@ def send_change_location_request(zip_code: str, headers: dict, cookies: dict):
 
 def get_session_cookies(zip_code: str):
     while True:
-        for URL in URL_LIST :
+        for URL in URL_LIST:
             response = requests.get(url=AMAZON_US_URL, headers=DEFAULT_REQUEST_HEADERS)
             content = Selector(text=response.text)
 
@@ -213,7 +219,7 @@ def get_session_cookies(zip_code: str):
             webpage = response.text
 
             webpage_soup = BeautifulSoup(webpage, "html.parser")
-            handle_webpage(webpage_soup)
+            handle_webpage(webpage_soup, URL)
 
             # location_label = content.css("span#glow-ingress-line2::text").get().strip()
             # assert zip_code in location_label
@@ -235,7 +241,7 @@ def start_app():
     get_session_cookies(zip_code=os.environ.get("ZIP_CODE"))
 
 
-# threading.Thread(target=start_app, daemon=True).start()
+threading.Thread(target=start_app, daemon=True).start()
 
 
 if __name__ == "__main__":
