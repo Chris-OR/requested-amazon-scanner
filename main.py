@@ -18,16 +18,16 @@ URL_LIST = ["https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp
 ]
 in_stock = []
 #
-# headers = {
-#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-#     "Accept-Encoding": "gzip,deflate,br",
-#     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-#     "Accept-Language": "en-US,en;q=0.9",
-#     "DNT": "1",
-#     "Connection": "close",
-#     "Upgrade-Insecure-Requests": "1",
-#     "Referer": "https://www.google.com/",
-# }
+proxy_headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+    "Accept-Encoding": "gzip,deflate,br",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "Accept-Language": "en-US,en;q=0.9",
+    "DNT": "1",
+    "Connection": "close",
+    "Upgrade-Insecure-Requests": "1",
+    "Referer": "https://www.google.com/",
+}
 #
 # payload = {
 #     'locationType': 'LOCATION_INPUT',
@@ -43,12 +43,12 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 
-def get_webpage(url, headers, cookies):
+def get_webpage_with_proxy(url):
     print(f"Trying to load Amazon page...")
     searching = True
     while searching:
         r = ProxyRequests("https://www.google.com/")
-        r.set_headers(headers)
+        r.set_headers(proxy_headers)
         r.get_with_headers()
         # print(r.get_status_code())
         proxy = r.get_proxy_used()
@@ -60,19 +60,19 @@ def get_webpage(url, headers, cookies):
         }
 
         try:
-            print(headers)
-            response = requests.get(url, headers=headers, cookies=cookies, verify=False)
+            response = requests.get(url, headers=proxy_headers, proxies=proxy)
             response.raise_for_status()
             searching = False
+            return response
         except Exception as e:
             print("\n\n\n\n\n")
             print(e)
             print("\n\n\n\n\n")
-            print(f"{time.strftime('%H:%M:%S', time.localtime())} something went wrong")
+            print("something went wrong")
 
-    webpage = response.text
-    webpage_soup = BeautifulSoup(webpage, "html.parser")
-    handle_webpage(webpage_soup)
+    # webpage = response.text
+    # webpage_soup = BeautifulSoup(webpage, "html.parser")
+    # handle_webpage(webpage_soup)
 #     # print(webpage_soup)
 #
 #
@@ -194,7 +194,8 @@ def get_session_cookies(zip_code: str):
     while True:
         for URL in URL_LIST:
             try:
-                response = requests.get(url=AMAZON_US_URL, headers=DEFAULT_REQUEST_HEADERS)
+                # response = requests.get(url=AMAZON_US_URL, headers=DEFAULT_REQUEST_HEADERS)
+                response = get_webpage_with_proxy(url=AMAZON_US_URL)
                 content = Selector(text=response.text)
                 webpage1 = response.text
                 webpage_soup = BeautifulSoup(webpage1, "html.parser")
