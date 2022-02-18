@@ -243,10 +243,11 @@ def send_telegram_message(title, price, URL):
 
 
 def start_app():
-    print("App loaded...")
+    print("Starting Scan...")
     get_session_cookies(zip_code=os.environ.get("ZIP_CODE"))
 
 
+print("App Loaded...")
 threading.Thread(target=start_app, daemon=True).start()
 
 
