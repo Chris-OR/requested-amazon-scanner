@@ -230,7 +230,7 @@ def start_app():
 
 
 print("App Loaded...")
-threading.Thread(target=start_app, daemon=True).start()
+# threading.Thread(target=start_app, daemon=True).start()
 
 
 if __name__ == "__main__":
