@@ -231,7 +231,7 @@ def get_session_cookies(zip_code: str):
             except ValueError as e:
                 print("ran into error when changing server location... trying again")
                 print(e)
-                time.sleep(30)
+                time.sleep(40)
 
 
 def send_telegram_message(title, price, URL):
