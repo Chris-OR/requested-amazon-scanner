@@ -196,7 +196,12 @@ def get_session_cookies(zip_code: str):
             try:
                 response = requests.get(url=AMAZON_US_URL, headers=DEFAULT_REQUEST_HEADERS)
                 content = Selector(text=response.text)
-                print(content)
+                webpage1 = response.text
+                webpage_soup = BeautifulSoup(webpage1, "html.parser")
+                if webpage_soup.find(name="p", class_="a-last"):
+                    print("caught a captcha when changing location")
+                else:
+                    print(webpage_soup)
                 headers = {
                     "anti-csrftoken-a2z": get_ajax_token(content=content),
                     "user-agent": DEFAULT_USER_AGENT,
@@ -231,7 +236,7 @@ def get_session_cookies(zip_code: str):
             except ValueError as e:
                 print("ran into error when changing server location... trying again")
                 print(e)
-                time.sleep(40)
+                time.sleep(75)
 
 
 def send_telegram_message(title, price, URL):
