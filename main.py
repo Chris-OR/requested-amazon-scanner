@@ -228,8 +228,9 @@ def get_session_cookies(zip_code: str):
 
                 # get_webpage("https://www.amazon.com/DYSON-208992-01-Dyson-Total-Clean/dp/B011MACQ4O/ref=sr_1_18?m=A2L77EE7U53NWQ&pf_rd_i=10158976011&pf_rd_m=ATVPDKIKX0DER&pf_rd_p=27825c4b-ab2a-4439-a18e-8a6136972ae0&pf_rd_r=HE81QTTRH8KVW7EX4920&pf_rd_s=merchandised-search-5&pf_rd_t=101&qid=1644958427&rnid=10158976011&s=warehouse-deals&sr=1-18", headers, response.cookies)
                 time.sleep(75)
-            except ValueError:
+            except ValueError as e:
                 print("ran into error when changing server location... trying again")
+                print(e)
                 time.sleep(30)
 
 
