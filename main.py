@@ -247,7 +247,7 @@ def start_app():
     get_session_cookies(zip_code=os.environ.get("ZIP_CODE"))
 
 
-threading.Thread(target=start_app, daemon=True).start()
+# threading.Thread(target=start_app, daemon=True).start()
 
 
 if __name__ == "__main__":
