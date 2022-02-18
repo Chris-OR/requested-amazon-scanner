@@ -109,7 +109,8 @@ def handle_webpage(soup, url):
                 in_stock.append(title)
         except:
             print("Product is unavailable")
-            in_stock.remove(title)
+            if title in in_stock:
+                in_stock.remove(title)
     print("\n")
 
 
