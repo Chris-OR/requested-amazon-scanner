@@ -6,7 +6,6 @@ import telegram
 import threading
 import os
 from flask import Flask
-
 import json
 from parsel import Selector
 
@@ -15,9 +14,10 @@ URL_LIST = ["https://www.amazon.com/BLACK-DECKER-Dustbuster-Cordless-CHV1410L/dp
             "https://www.amazon.com/Dyson-Animal-Cordless-Vacuum-Cleaner/dp/B079K9B4XV/ref=sr_1_3?keywords=Dyson&m=A2L77EE7U53NWQ&qid=1644714367&s=warehouse-deals&sr=8-3",
             "https://www.amazon.com/Dyson-Cyclone-Absolute-Lightweight-Cordless/dp/B0798FVV6V/ref=sr_1_20?m=A2L77EE7U53NWQ&qid=1644862049&rnid=10158976011&s=warehouse-deals&sr=1-20",
             "https://www.amazon.com/Dyson-Animal-Cordless-Vacuum-Cleaner/dp/B079K9B4XV/ref=sr_1_15?m=A2L77EE7U53NWQ&qid=1644862049&rnid=10158976011&s=warehouse-deals&sr=1-15"
-]
+            ]
+
 in_stock = []
-#
+
 proxy_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
     "Accept-Encoding": "gzip,deflate,br",
@@ -28,17 +28,7 @@ proxy_headers = {
     "Upgrade-Insecure-Requests": "1",
     "Referer": "https://www.google.com/",
 }
-#
-# payload = {
-#     'locationType': 'LOCATION_INPUT',
-#     'zipCode': '62999',
-#     'storeContext': 'generic',
-#     'deviceType': 'web',
-#     'pageType': 'Gateway',
-#     'actionSource': 'glow',
-#     'almBrandId': 'undefined'
-# }
-#
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
@@ -65,9 +55,9 @@ def get_webpage_with_proxy(url):
             searching = False
             return response
         except Exception as e:
-            print("\n\n\n\n\n")
+            print("\n")
             print(e)
-            print("\n\n\n\n\n")
+            print("\n")
             print("something went wrong")
 
     # webpage = response.text
@@ -99,28 +89,19 @@ def handle_webpage(soup, url):
         title = soup.find(id="productTitle").getText().rstrip().lstrip()
         # price = soup.find(id="buyNew_noncbb").getText()
         # print(price)
-        if title:
-            print(title)
+        # if title:
+        #     print(title)
         try:
             price = soup.find(id="buyNew_noncbb").getText().rstrip().lstrip()
-            print(price)
+            print(f"{title} is {price}")
             if title not in in_stock:
                 send_telegram_message(title, price, url)
                 in_stock.append(title)
         except:
-            print("Product is unavailable")
+            print(f"{title} is unavailable")
             if title in in_stock:
                 in_stock.remove(title)
     print("\n")
-
-
-#
-# threading.Thread(target=checker_thread, daemon=True).start()
-#
-# if __name__ == "__main__":
-#     app.run(debug=False)
-
-
 
 
 
@@ -230,7 +211,6 @@ def get_session_cookies(zip_code: str):
                 location_label = content.css("span#glow-ingress-line2::text").get().strip()
                 assert zip_code in location_label
 
-                # get_webpage("https://www.amazon.com/DYSON-208992-01-Dyson-Total-Clean/dp/B011MACQ4O/ref=sr_1_18?m=A2L77EE7U53NWQ&pf_rd_i=10158976011&pf_rd_m=ATVPDKIKX0DER&pf_rd_p=27825c4b-ab2a-4439-a18e-8a6136972ae0&pf_rd_r=HE81QTTRH8KVW7EX4920&pf_rd_s=merchandised-search-5&pf_rd_t=101&qid=1644958427&rnid=10158976011&s=warehouse-deals&sr=1-18", headers, response.cookies)
                 time.sleep(75)
             except ValueError as e:
                 print("ran into error when changing server location... trying again")
