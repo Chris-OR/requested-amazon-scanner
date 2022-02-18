@@ -201,8 +201,6 @@ def get_session_cookies(zip_code: str):
                 webpage_soup = BeautifulSoup(webpage1, "html.parser")
                 if webpage_soup.find(name="p", class_="a-last"):
                     print("caught a captcha when changing location")
-                else:
-                    print(webpage_soup)
                 headers = {
                     "anti-csrftoken-a2z": get_ajax_token(content=content),
                     "user-agent": DEFAULT_USER_AGENT,
