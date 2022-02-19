@@ -232,6 +232,9 @@ def start_app():
 print("App Loaded...")
 threading.Thread(target=start_app, daemon=True).start()
 
+@app.route('/')
+def home():
+    return("hello")
 
 if __name__ == "__main__":
     app.run(debug=False)
