@@ -220,8 +220,11 @@ def send_telegram_message(title, price, URL):
     bot_token = os.environ.get("BOT_TOKEN")
     bot = telegram.Bot(bot_token)
     chat_id = os.environ.get("VACUUM_CHAT_ID")
+    chat_id2 = os.environ.get("VACUUM_CHAT_ID2")
     message = f"{title} is {price}.  Check it out: {URL}"
     bot.sendMessage(chat_id, message, parse_mode=telegram.ParseMode.HTML)
+    bot.sendMessage(chat_id2, message, parse_mode=telegram.ParseMode.HTML)
+
 
 
 def start_app():
