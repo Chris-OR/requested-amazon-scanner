@@ -226,7 +226,6 @@ def send_telegram_message(title, price, URL):
     bot.sendMessage(chat_id2, message, parse_mode=telegram.ParseMode.HTML)
 
 
-
 def start_app():
     print("Starting Scan...")
     get_session_cookies(zip_code=os.environ.get("ZIP_CODE"))
